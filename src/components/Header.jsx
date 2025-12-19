@@ -15,7 +15,7 @@ function Header({ currentPage, setCurrentPage, cartCount, onCartClick, onSearch,
     <header className="header">
       <div className="container">
         <div className="logo" onClick={() => handleNavClick('home')}>
-          <h2>FURNITURE</h2>
+          <h2>InterioX</h2>
         </div>
         <nav className="nav">
           <button 
