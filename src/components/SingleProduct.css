@@ -63,11 +63,11 @@
   line-height: 1.6;
 }
 
-.current-price {
+/* .current-price {
   font-size: 2.5rem;
   color: #ff6b35;
   font-weight: bold;
-}
+} */
 
 .stock-info {
   font-size: 1.1rem;

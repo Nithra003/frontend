@@ -4,11 +4,11 @@
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 1000;
+  z-index: 9999;
 }
 
 .cart-container {
@@ -18,6 +18,18 @@
   max-width: 600px;
   max-height: 80vh;
   overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+  border: 2px solid #ddd;
+}
+
+/* Hide scrollbar */
+.cart-container::-webkit-scrollbar {
+  display: none;
+}
+
+.cart-container {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 }
 
 .cart-header {

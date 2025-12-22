@@ -88,7 +88,7 @@ function ProductForm({ onAddProduct, onClose }) {
           <input
             type="number"
             name="price"
-            placeholder="Price (without $)"
+            placeholder="Price (with ₹)"
             value={formData.price}
             onChange={handleChange}
             required

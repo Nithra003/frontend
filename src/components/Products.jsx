@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { productAPI } from '../services/api'
 import './Products.css'
 
-function Products({ addToCart, removeFromCart, onProductClick, onCategoryClick, searchQuery }) {
+function Products({ addToCart, removeFromCart, onProductClick, onCategoryClick, searchQuery, addToWishlist, wishlistItems = [] }) {
   const [featuredProducts, setFeaturedProducts] = useState([])
   const [loading, setLoading] = useState(true)
 
@@ -39,7 +39,7 @@ function Products({ addToCart, removeFromCart, onProductClick, onCategoryClick, 
     { id: 1, name: 'Premium Sofa Set', description: 'Luxurious 3-seater sofa with premium fabric and modern design', price: '$1,299', image: 'https://www.royaloakindia.com/media/catalog/product/s/f/sf7008-3_11.jpg?optimize=high&bg-color=255,255,255&fit=bounds&height=500&width=800&canvas=800:500', rating: '⭐⭐⭐⭐⭐', stock: 12, category: 'Living Room' },
     { id: 2, name: 'Modern Coffee Table', description: 'Solid acacia wood coffee table with steel frame', price: '$399', image: 'https://inmarwar.com/cdn/shop/products/coffee-table-made-of-solid-acacia-wood-and-carbon-steel-551513.jpg?v=1694500159&width=1080', rating: '⭐⭐⭐⭐⭐', stock: 8, category: 'Living Room' },
     { id: 3, name: 'Luxury Bed Frame', description: 'Queen size wooden bed frame with elegant headboard', price: '$899', image: 'https://encrypted-tbn3.gstatic.com/shopping?q=tbn:ANd9GcQSxkF-UBDvjQnmqUMurvI9LUFYRszXpzqQo_Qy40kWSbKu-GoZWK5Yg_V9C7PUph80RneyecU5UiMyHm6vj7j04At1GCF0YeKAD5hYEkWv', rating: '⭐⭐⭐⭐⭐', stock: 6, category: 'Bedroom' },
-    { id: 4, name: 'Executive Desk', description: 'Professional office desk with storage compartments', price: '$699', image: 'https://m.media-amazon.com/images/I/71QX7Q7HXQL._AC_UF894,1000_QL80_.jpg', rating: '⭐⭐⭐⭐⭐', stock: 10, category: 'Office' },
+    { id: 4, name: 'Executive Desk', description: 'Professional office desk with storage compartments', price: '$699', image: 'https://images.unsplash.com/photo-1497366216548-37526070297c?w=400&h=400&fit=crop', rating: '⭐⭐⭐⭐⭐', stock: 10, category: 'Office' },
     { id: 5, name: 'Ergonomic Office Chair', description: 'High-back mesh office chair with lumbar support', price: '$299', image: 'https://images.unsplash.com/photo-1541558869434-2840d308329a?w=400&h=400&fit=crop', rating: '⭐⭐⭐⭐⭐', stock: 15, category: 'Office' },
     { id: 6, name: 'Dining Table Set', description: '6-seater oak dining table with matching chairs', price: '$1,199', image: 'https://images.unsplash.com/photo-1449824913935-59a10b8d2000?w=400&h=400&fit=crop', rating: '⭐⭐⭐⭐⭐', stock: 5, category: 'Dining Room' },
     { id: 7, name: 'Bookshelf Cabinet', description: '5-tier wooden bookshelf with adjustable shelves', price: '$249', image: 'https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=400&fit=crop', rating: '⭐⭐⭐⭐⭐', stock: 20, category: 'Storage' },
@@ -52,6 +52,14 @@ function Products({ addToCart, removeFromCart, onProductClick, onCategoryClick, 
 
   const handleAddToCart = (product) => {
     addToCart(product)
+  }
+
+  const handleAddToWishlist = (product) => {
+    addToWishlist(product)
+  }
+
+  const isInWishlist = (productId) => {
+    return wishlistItems.some(item => (item.id || item._id) === productId)
   }
 
   const filteredProducts = featuredProducts.filter(product =>
@@ -95,12 +103,20 @@ function Products({ addToCart, removeFromCart, onProductClick, onCategoryClick, 
                     <h3>{product.name}</h3>
                     <div className="rating">{product.rating || '⭐⭐⭐⭐⭐'}</div>
                     <p className="price">{product.price}</p>
-                    <button 
-                      className="add-to-cart"
-                      onClick={() => handleAddToCart(product)}
-                    >
-                      Add to Cart
-                    </button>
+                    <div className="product-actions">
+                      <button 
+                        className="add-to-cart"
+                        onClick={() => handleAddToCart(product)}
+                      >
+                        Add to Cart
+                      </button>
+                      <button 
+                        className={`add-to-wishlist ${isInWishlist(product.id || product._id) ? 'in-wishlist' : ''}`}
+                        onClick={() => handleAddToWishlist(product)}
+                      >
+                        ♡
+                      </button>
+                    </div>
                   </div>
                 </div>
               ))

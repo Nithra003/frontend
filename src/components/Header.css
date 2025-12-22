@@ -10,7 +10,7 @@
 .header .container {
   max-width: 1400px;
   margin: 0 auto;
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,16 +20,18 @@
 .logo {
   cursor: pointer;
   transition: transform 0.2s;
+  display: flex;
+  align-items: center;
 }
 
 .logo:hover {
   transform: scale(1.05);
 }
 
-.logo h2 {
-  color: #ff6b35;
-  margin: 0;
-  font-weight: bold;
+.logo-image {
+  height: 80px;
+  width: auto;
+  object-fit: contain;
 }
 
 .nav {
@@ -107,6 +109,22 @@
   padding: 0.5rem;
   border-radius: 50%;
   transition: background 0.3s;
+  text-decoration: none;
+  outline: none;
+}
+
+.cart-btn:focus {
+  outline: none;
+  box-shadow: none;
+}
+
+.cart-btn:active {
+  outline: none;
+}
+
+.cart-btn::before,
+.cart-btn::after {
+  display: none;
 }
 
 .cart-btn:hover {

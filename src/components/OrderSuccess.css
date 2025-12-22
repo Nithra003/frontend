@@ -1,0 +1,103 @@
+.success-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 10001;
+}
+
+.success-container {
+  background: white;
+  border-radius: 15px;
+  padding: 3rem;
+  text-align: center;
+  max-width: 500px;
+  width: 90%;
+  max-height: 80vh;
+  overflow-y: auto;
+}
+
+.success-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.success-container h2 {
+  color: #27ae60;
+  margin-bottom: 1rem;
+}
+
+.success-container p {
+  color: #666;
+  margin-bottom: 1rem;
+  line-height: 1.5;
+}
+
+.continue-btn {
+  background: #ff6b35;
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.3s;
+}
+
+.continue-btn:hover {
+  background: #e55a2b;
+}
+
+.ordered-items {
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.ordered-items h3 {
+  color: #333;
+  margin-bottom: 1rem;
+  text-align: center;
+}
+
+.items-list {
+  max-height: 300px;
+  overflow-y: auto;
+}
+
+.ordered-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem;
+  border: 1px solid #eee;
+  border-radius: 8px;
+  margin-bottom: 0.5rem;
+}
+
+.item-image {
+  width: 60px;
+  height: 60px;
+  object-fit: cover;
+  border-radius: 5px;
+}
+
+.item-details h4 {
+  margin: 0 0 0.5rem 0;
+  color: #333;
+}
+
+.item-details p {
+  margin: 0.25rem 0;
+  font-size: 0.9rem;
+}
+
+.item-price {
+  font-weight: bold;
+  color: #ff6b35;
+}

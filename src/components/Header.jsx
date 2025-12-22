@@ -1,4 +1,5 @@
 import './Header.css'
+import logoImage from '../assets/InterioX.logo.jpg'
 
 function Header({ currentPage, setCurrentPage, cartCount, onCartClick, onSearch, user, onLoginClick, onLogout }) {
   const handleNavClick = (page) => {
@@ -15,7 +16,7 @@ function Header({ currentPage, setCurrentPage, cartCount, onCartClick, onSearch,
     <header className="header">
       <div className="container">
         <div className="logo" onClick={() => handleNavClick('home')}>
-          <h2>InterioX</h2>
+          <img src={logoImage} alt="InterioX" className="logo-image" />
         </div>
         <nav className="nav">
           <button 
@@ -47,6 +48,18 @@ function Header({ currentPage, setCurrentPage, cartCount, onCartClick, onSearch,
             onClick={() => handleNavClick('contact')}
           >
             Contact
+          </button>
+          <button 
+            className={currentPage === 'orders' ? 'nav-btn active' : 'nav-btn'}
+            onClick={() => handleNavClick('orders')}
+          >
+            Orders
+          </button>
+          <button 
+            className={currentPage === 'wishlist' ? 'nav-btn active' : 'nav-btn'}
+            onClick={() => handleNavClick('wishlist')}
+          >
+            Wishlist
           </button>
         </nav>
         <div className="header-actions">
