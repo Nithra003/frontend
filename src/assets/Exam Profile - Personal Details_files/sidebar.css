@@ -1,0 +1,93 @@
+.exam-form-progress {
+  padding: 0 16px 0;
+  /* margin: 0 16px; */
+  display: flex;
+  justify-content: space-between;
+  border-bottom: 1px solid #c7c9d9;
+  position: relative;
+  margin-bottom: 18px;
+}
+
+.exam-form-step {
+  padding: 0 8px 8px;
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  color: inherit;
+}
+
+.exam-form-step.current-step {
+  border-bottom: 3px solid #0063F7;
+}
+
+.exam-form-step:hover {
+  text-decoration: none;
+}
+
+.step-name {
+  display: none;
+}
+
+.exam-form-step.current-step svg path:last-child {
+  fill: #0063F7;
+}
+
+.exam-form-step.current-step .step-name {
+  display: block;
+  position: absolute;
+  left: 12px;
+  bottom: -32px;
+  font-size: 0.88rem;
+  font-weight: bold;
+  color: #28293d;
+}
+
+
+/* Media Queries portrait tablets, portrait iPad, landscape 800x480 phones*/
+@media screen and (min-width:600px) {
+  .exam-form-progress {
+    flex-direction: column;
+    border-bottom: none;
+  }
+
+  .exam-form-step {
+    margin: 12px 0;
+  }
+
+  .exam-form-step:first-child {
+    margin-top: 0;
+  }
+
+  .step-name {
+    display: inline;
+    margin-left: 12px;
+    font-size: 0.88rem;
+    color: #555770;
+  }
+
+  .exam-form-step.current-step {
+    border-bottom: none;
+  }
+
+  .exam-form-step.current-step .step-name {
+    position: static;
+    font-size: 0.85rem;
+    color: #0063F7;
+    font-weight: normal;
+  }
+}
+
+/* Media Queries tablet, landscape iPad, lo-res laptops ands desktops*/
+@media screen and (min-width: 801px) {
+  .step-name {
+    display: inline;
+    margin-left: 12px;
+    font-size: 0.9rem;
+  }
+
+  .exam-form-step.current-step .step-name {
+    color: #0063F7;
+    font-weight: 600;
+    font-size: 1rem;
+  }
+}

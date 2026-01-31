@@ -1,0 +1,1089 @@
+function RestrictSpecialCharacter(e) {
+    var theEvent = e || window.event;
+    var key = theEvent.keyCode || theEvent.which;
+    key = String.fromCharCode(key);
+    var regex = /[A-Za-z\s]$/
+    if (! regex.test(key)) {
+        theEvent.returnValue = false;
+        if (theEvent.preventDefault) {
+            theEvent.preventDefault();
+        }
+    }
+}
+
+	function openPopUp(ele){
+
+		var parent = ele.parentElement;
+		var img_name = parent.getElementsByClassName("custom-file-input")[0].name;
+		var signed_url = $("#"+img_name).attr("signed-url");
+		img_name += "_hidden";
+
+		var src = $("#"+img_name).val().trim();
+
+		if(src.startsWith("https://storage.cloud.google.com")){
+		    extension = src.split('.').pop();
+		    if(extension == "jpg" || extension == "jpeg"){
+			    $(".image-popup-link").attr("href",signed_url);
+			    $(".image-popup-link").click();
+		    }else{
+			    $(".pdf-popup-link").attr("href",signed_url);
+//			    $(".pdf-popup-link").trigger("click");
+                parent.getElementsByClassName("pdf-popup-link")[0].click();
+		    }
+		}else{
+			extension = src.match(/[^:/]\w+(?=;|,)/)[0];
+	        if(extension == "jpg" || extension == "jpeg"){
+			    $(".image-popup-link").attr("href",$("#"+img_name).val());
+			    $(".image-popup-link").click();
+		    }else{
+			    $(".pdf-popup-link").attr("href",$("#"+img_name).val());
+//			    $(".pdf-popup-link").trigger("click");
+                parent.getElementsByClassName("pdf-popup-link")[0].click();
+		    }
+		}
+
+
+
+	}
+function get_exam_taker_role(){
+    let exam_taker_role_choices = document.getElementsByName("exam_taker_role");
+    let exam_taker_role = "";
+    for(let i = 0; i < exam_taker_role_choices.length; i++){
+        if(exam_taker_role_choices[i].checked){
+            exam_taker_role = exam_taker_role_choices[i].value;
+        }
+    }
+    return exam_taker_role
+}
+function validateExamForm(){
+    $('#name').removeAttr('disabled');
+    $('#date_of_birth').removeAttr('disabled');
+    $('input[name="gender"]').removeAttr('disabled');
+
+    if (!document.getElementById('address_consent').checked) {
+    document.getElementById("address_consent").focus();
+    alert("Please confirm that you do not have any issues sharing your address");
+    return false;
+    }
+
+    var userNameField = document.getElementById("name");
+    if(userNameField.value == "" || ! userNameField.value ){
+        userNameField.focus();
+        alert("Please enter name");
+        return false;
+    }else{
+        input_name_value = userNameField.value;
+        userNameField.value = input_name_value.trim();
+        var regex = /^([A-Za-z]+ )+[A-Za-z]+$|^[A-Za-z]+$/
+        if(!regex.test(userNameField.value)){
+            alert("Name should not have any special characters, numbers, more than one spaces in name");
+            return false;
+        }
+
+    }
+
+    var dateOfBirthField = document.getElementById("date_of_birth");
+    if(! dateOfBirthField.value){
+        dateOfBirthField.focus();
+        alert("Please enter date of birth");
+        return false;
+    }
+
+     var dob_field = document.getElementById("date_of_birth");
+     var date_of_birth = dob_field.value;
+     var current_year_field = document.getElementById("current_year")
+     if (current_year_field != null || typeof(current_year_field) != 'undefined') {
+        var current_year = parseInt(current_year_field.value);
+        var formatted_date_of_birth = new Date(date_of_birth.replace(/(\d\d)\/(\d\d)\/(\d{4})/, "$3-$2-$1"));
+        // Validate if the Date of Birth is within the acceptable range
+        // i.e dob_year > {current year - 110} and dob_year < {current year - 5} (the range is based on date-picker rendering)
+        var threshold_year = current_year - 5
+        if (formatted_date_of_birth.getFullYear() > threshold_year) {
+            dob_field.focus();
+            alert('Birth year cannot be greater than ' + threshold_year + ', Please add appropriate birth year.');
+            return false;
+        }
+        var threshold_year_min = current_year - 110
+        if (formatted_date_of_birth.getFullYear() < threshold_year_min){
+            dob_field.focus();
+            alert('Birth year cannot be lesser than ' + threshold_year_min + ', Please add appropriate birth year.');
+            return false;
+        }
+     }
+
+    var address_countryField = document.getElementById("address_country");
+    var address_countryFieldValue = address_countryField.value
+    if(!address_countryFieldValue || address_countryFieldValue == "" || address_countryFieldValue == "Select" || address_countryFieldValue == "Select a value"){
+        address_countryField.focus();
+        alert("Please check Country field");
+        return false;
+    }
+    if(address_countryFieldValue == 'other'){
+        var other_address_countryField = document.getElementById("other_address_country");
+        if(other_address_countryField.value == "" || other_address_countryField.value.length > 40){
+            other_address_countryField.focus();
+            alert("Please enter a valid Country Name. It should not be empty and should not exceed 40 characters.");
+            return false;
+        }
+    }
+
+    var address_stateField = document.getElementById("address_state");
+    var address_stateFieldValue = address_stateField.value
+    if(!address_stateFieldValue || address_stateFieldValue == "" || address_stateFieldValue == "Select" || address_stateFieldValue == "Select a value"){
+        address_stateField.focus();
+        alert("Please check State field");
+        return false;
+    }
+    if(address_stateFieldValue == 'other'){
+        var other_address_stateField = document.getElementById("other_address_state");
+        if(other_address_stateField.value == "" || other_address_stateField.value.length > 40){
+            other_address_stateField.focus();
+            alert("Please enter a valid State Name. It should not be empty and should not exceed 40 characters.");
+            return false;
+        }
+    }
+
+    var address_cityField = document.getElementById("address_city");
+    var address_cityFieldValue = address_cityField.value
+    if(!address_cityFieldValue || address_cityFieldValue == "" || address_cityFieldValue == "Select" || address_cityFieldValue == "Select a value"){
+        address_cityField.focus();
+        alert("Please check City field");
+        return false;
+    }
+    if(address_cityFieldValue == 'other'){
+        var other_address_cityField = document.getElementById("other_address_city");
+        if(other_address_cityField.value == "" || other_address_cityField.value.length > 40){
+            other_address_cityField.focus();
+            alert("Please enter a valid City Name. It should not be empty and should not exceed 40 characters.");
+            return false;
+        }
+    }
+
+    var mobRegEx = /^((0091)|(\+91)|0?)[6789]{1}\d{9}$/
+
+    var mobileNumberField = document.getElementById("mobile_number");
+    var mobileNumber = mobileNumberField.value;
+    if(mobileNumber != ""){
+        if(! mobRegEx.test(mobileNumber)){
+            mobileNumberField.focus();
+            alert("Mobile number is not valid");
+            return false;
+            }
+    }else{
+        mobileNumberField.focus();
+        alert("Please enter mobile number");
+        return false;
+    }
+
+    if(document.getElementById("re_entered_mobile_number"))
+    {
+      var reEnteredMobileNumberField = document.getElementById("re_entered_mobile_number");
+      var reEnteredMobileNumber = reEnteredMobileNumberField.value;
+      if(reEnteredMobileNumber != mobileNumber){
+        alert("Re-entered mobile number does not match.");
+        return false;
+      }
+    }
+    var alternateMobileNumberField = document.getElementById("alternate_mobile_number");
+    var alternateMobileNumber = alternateMobileNumberField.value;
+    if(alternateMobileNumber != ""){
+        if(! mobRegEx.test(alternateMobileNumber)){
+            alternateMobileNumberField.focus();
+            alert("Alternate Mobile number is not valid");
+            return false;
+            }
+    }else{
+        alternateMobileNumberField.focus();
+        alert("Please enter alternate mobile number");
+        return false;
+    }
+
+    var gender_choices = document.getElementsByName('gender');
+    var selected_gender = "";
+    for(var i = 0; i < gender_choices.length; i++){
+        if(gender_choices[i].checked){
+        selected_gender = gender_choices[i].value;
+        }
+    }
+    if(selected_gender == "" ){
+        alert("Please enter gender");
+        return false;
+    }else{
+        if(! (["male", "female", "other"].includes(selected_gender)) ){
+            alert("Please select gender");
+            return false;
+        }
+    }
+
+
+        var photo = document.getElementById("photo");
+    var photo_hidden_component = document.getElementById("photo_hidden");
+
+
+    if(! validateFileSize(photo, photo_hidden_component, 50, 150)){
+        photo.focus();
+        alert("Please upload JPEG/JPG file in range of 50KB to 150KB for passport size photo");
+        return false;
+    }
+    // checking file has been uploaded or still in process
+    if(! validateFileUploaded(photo_hidden_component)){
+        photo.focus();
+        alert("Please wait file is being uploaded.");
+        return false;
+    }
+
+    if(! validateFileExtension(photo, photo_hidden_component, ["jpg", "jpeg", "JPG", "JPEG"])){
+        photo.focus();
+        alert("Only JPEG, JPG files are allowed for uploading passport size photo");
+        return false;
+    }
+
+
+    var signature = document.getElementById("signature");
+    var signature_hidden_component = document.getElementById("signature_hidden");
+
+    if(! validateFileSize(signature, signature_hidden_component, 50, 150)){
+        signature.focus();
+        alert("Please upload JPEG/JPG file in range of 50KB to 150KB for signature proof");
+        return false;
+    }
+    // checking file has been uploaded or still in process
+    if(! validateFileUploaded(signature_hidden_component)){
+        signature.focus();
+        alert("Please wait file is being uploaded.");
+        return false;
+    }
+
+    if(! validateFileExtension(signature, signature_hidden_component, ["jpg", "jpeg", "JPG", "JPEG"])){
+        signature.focus();
+        alert("Only JPEG, JPG file is allowed for uploading Signature");
+        return false;
+    }
+
+    var idproof = document.getElementById("idproof");
+    var idproof_hidden_component = document.getElementById("idproof_hidden");
+
+    if(! validateFileSize(idproof, idproof_hidden_component, 50, 2000)){
+        idproof.focus();
+        alert("Please upload JPEG/JPG/PDF file in range of 50KB to 2MB for ID proof");
+        return false;
+    }
+    // checking file has been uploaded or still in process
+    if(! validateFileUploaded(idproof_hidden_component)){
+        idproof.focus();
+        alert("Please wait file is being uploaded.");
+        return false;
+    }
+
+    if(! validateFileExtension(idproof, idproof_hidden_component, ["jpg", "jpeg", "JPG", "JPEG", "pdf", "PDF"])){
+        idproof.focus();
+        alert("Only PDF, JPEG, JPG files are allowed for uploading ID proof");
+        return false;
+    }
+
+    var category_choices = document.getElementsByName('is_scst');
+    var is_scst_value = "";
+    for(var i = 0; i < category_choices.length; i++){
+        if(category_choices[i].checked){
+            is_scst_value = category_choices[i].value;
+        }
+    }
+    if(is_scst_value == "" ){
+        alert("Please select if you come under SC/ST category");
+        return false;
+    }else{
+        if(! (["True", "False"].includes(is_scst_value))){
+
+            alert("Please select correct choice for SC/ST category");
+            return false;
+        }else{
+            var category_proof_element = document.getElementById("category_proof");
+            if(is_scst_value == "False"){
+                if(is_scst_value.files != undefined){
+                    is_scst_value.files[0] = null;
+                }
+
+            }else{
+                var category_proof_hidden_element = document.getElementById("category_proof_hidden");
+                //file size validation
+                var proof_validation = validateFileSize(category_proof_element, category_proof_hidden_element, 50, 2000);
+                if(! proof_validation){
+                    category_proof_element.focus();
+                    alert("Please upload JPEG/JPG/PDF file in range of 50KB to 2MB for SC/ST category proof");
+                    return false;
+                }
+                // checking file has been uploaded or still in process
+                 if(! validateFileUploaded(category_proof_hidden_element)){
+                    category_proof_element.focus();
+                    alert("Please wait file is being uploaded.");
+                    return false;
+                }
+                //check file type is student has selected yes for SC/ST
+                var file_type_validation = validateFileExtension(category_proof_element, category_proof_hidden_element,["jpg", "jpeg", "JPG", "JPEG", "pdf", "PDF"]);
+                if(! file_type_validation){
+                    category_proof_element.focus();
+                    alert("Only PDF, JPEG file is allowed for uploading SC/ST category proof");
+                    return false;
+                }
+            }
+
+
+        }
+    }
+
+    var is_physically_challenged_choices = document.getElementsByName("is_physically_challenged");
+    var pwd_category = document.getElementById("pwd_category");
+    var is_physically_challenged = "";
+    for(var i = 0; i < is_physically_challenged_choices.length; i++){
+        if(is_physically_challenged_choices[i].checked){
+            is_physically_challenged = is_physically_challenged_choices[i].value;
+        }
+    }
+    if(is_physically_challenged == "" ){
+        alert("Please select if you are a person with disabilities");
+        return false;
+    }else{
+        if(! (["True", "False"].includes(is_physically_challenged))){
+            alert("Please select correct choice for person with disabilities");
+            return false;
+        }else{
+            if(is_physically_challenged === 'True' && pwd_category.value === 'Select') {
+                    pwd_category.focus();
+                    alert("Please Select the choice for person with disabilities");
+                    return false;
+            }
+            var disability_proof_element = document.getElementById("disability_proof");
+            if(is_physically_challenged == "False"){
+                if(disability_proof_element.files != undefined){
+                    disability_proof_element.files[0] = null;
+                }
+            }else{
+                var disability_proof_hidden = document.getElementById("disability_proof_hidden");
+                //File size validation
+                var proof_validation = validateFileSize(disability_proof_element, disability_proof_hidden, 50, 2000);
+                if(! proof_validation){
+                    disability_proof_element.focus();
+                    alert("Please upload JPEG/JPG/PDF file in range of 50KB to 2MB for person with disabilities proof");
+                    return false;
+                }
+                // checking file has been uploaded or still in process
+                if(! validateFileUploaded(disability_proof_hidden)){
+                    disability_proof_element.focus();
+                    alert("Please wait file is being uploaded.");
+                    return false;
+                }
+                //File type validation
+                var file_type_validation = validateFileExtension(disability_proof_element, disability_proof_hidden, ["jpg", "jpeg", "JPG", "JPEG", "pdf", "PDF"]);
+                if(! file_type_validation){
+                    disability_proof_element.focus();
+                    alert("Only PDF, JPEG file is allowed for uploading person with disabilities proof");
+                    return false;
+                }
+            }
+        }
+    }
+
+    var exam_taker_role_choices = document.getElementsByName("exam_taker_role");
+    var exam_taker_role = "";
+    for(var i = 0; i < exam_taker_role_choices.length; i++){
+        if(exam_taker_role_choices[i].checked){
+            exam_taker_role = exam_taker_role_choices[i].value;
+        }
+    }
+    if(exam_taker_role == "" ){
+        alert("Please select your role from Student, Faculty, Employed or Others");
+        return false;
+    }else{
+        if(! (["student", "faculty", "employed", "other"].includes(exam_taker_role))){
+            alert("Please select correct role from Student, Faculty, Employed or Others");
+            return false;
+        } else {
+            if($("input[name='from_outside_india']:checked").val() == "True"){
+                let status = validateFileSizeAndExtension('residence_proof', 'Residence Proof')
+                if (! status){
+                    return false
+                }
+                status = validateFileSizeAndExtension('citizenship_id_proof', 'Citizenship ID Proof')
+                if (! status){
+                    return false
+                }
+                let element = document.getElementById('residence_proof_hidden');
+                status = validateFileUploaded(element);
+                if(! status){
+                    return false
+                }
+                element = document.getElementById('citizenship_id_proof_hidden');
+                status = validateFileUploaded(element);
+                if(! status){
+                    return false
+                }
+                if (exam_taker_role == "student" || exam_taker_role == "faculty"){
+                    let status = validateFileSizeAndExtension('college_letter', 'College Letter')
+                    if (! status){
+                        return false
+                    }
+                    element = document.getElementById('college_letter_hidden');
+                    status = validateFileUploaded(element);
+                    if(! status){
+                        return false
+                    }
+                }
+                if (exam_taker_role == "employed"){
+                    let status = validateFileSizeAndExtension('company_letter', 'Company Letter')
+                    if (! status){
+                        return false
+                    }
+                    element = document.getElementById('company_letter_hidden');
+                    status = validateFileUploaded(element);
+                    if(! status){
+                        return false
+                    }
+                }
+            }
+        }
+    }
+
+    var is_local_chapter_choices = document.getElementsByName("is_local_chapter");
+    var is_local_chapter = "";
+    for(var i = 0; i < is_local_chapter_choices.length; i++){
+        if(is_local_chapter_choices[i].checked){
+            is_local_chapter = is_local_chapter_choices[i].value;
+        }
+    }
+    if(is_local_chapter == "" ){
+        alert("Please select whether you are part of NPTEL local chapter");
+        return false;
+    }else{
+        if(! (["True", "False"].includes(is_local_chapter))){
+            alert("Please select correct option whether you are part of NPTEL local chapter");
+            return false;
+        }
+    }
+
+    if(is_local_chapter == "True"){
+        state_value = document.getElementById("local_chapter_state_select").value;
+        if(! state_value || state_value == "" || state_value == "Select"){
+            alert("Please select NPTEL local chapter state");
+            return false;
+        }
+        local_chapter_city_value = document.getElementById("local_chapter_city_select").value;
+        if(! local_chapter_city_value || local_chapter_city_value == "" || local_chapter_college == "Select" || local_chapter_city_value == "Select a city" ){
+            alert("Please select NPTEL local chapter city");
+            return false;
+        }
+
+        var local_chapter_college = document.getElementById("local_chapter_college").value;
+        if(! local_chapter_college || local_chapter_college == "" || local_chapter_college == "Select" || local_chapter_college == "Select a college"){
+            alert("Please select NPTEL local chapter college");
+            return false;
+        }
+
+    }
+
+    var courseInformationSourceField = document.getElementById("course_information_source");
+    var courseInformationSource = courseInformationSourceField.value;
+    if (!courseInformationSource || courseInformationSource == "" || courseInformationSource == "Select" || courseInformationSource== "Select a value"){
+      alert("Please select an information source");
+      return false;
+    }
+
+
+    var courseMotivationField = document.getElementById("course_motivation");
+    var courseMotivation = courseMotivationField.value;
+    if (!courseMotivation || courseMotivation == "" || courseMotivation == "Select" || courseMotivation == "Select a value"){
+      alert("Please select a reason for pursuing the course")
+      return false;
+    }
+
+    var share_with_potential_employers_choices = document.getElementsByName("share_with_potential_employers");
+    var share_with_potential_employers = "";
+    for(var i = 0; i < share_with_potential_employers_choices.length; i++){
+        if(share_with_potential_employers_choices[i].checked){
+            share_with_potential_employers = share_with_potential_employers_choices[i].value;
+        }
+    }
+    if(! (["True", "False"].includes(share_with_potential_employers))){
+        alert("Please select if you are okay with sharing your details with potential employers");
+        return false;
+    }
+}
+function validateFileSizeAndExtension(id, name) {
+    let element = document.getElementById(id);
+    let hidden_element = document.getElementById(`${id}_hidden`);
+    //file size validation
+    let proof_validation = validateFileSize(element, hidden_element, 50, 2000);
+    if(! proof_validation){
+        element.focus();
+        alert(`Please upload JPEG/JPG/PDF file in range of 50KB to 2MB for ${name}`);
+        return false;
+    }
+    //check file extension
+    let file_type_validation = validateFileExtension(element, hidden_element,["jpg", "jpeg", "JPG", "JPEG", "pdf", "PDF"]);
+    if(! file_type_validation){
+        element.focus();
+        alert(`Only PDF, JPEG file is allowed for uploading ${name}`);
+        return false;
+    }
+    return true;
+}
+
+function validateFileExtension(component, hidden_component, extns)
+{
+    let filename = component.nextElementSibling.innerText;
+    var file_url = component.getAttribute('value').trim();
+    var hidden_file_value = hidden_component.value;
+    var is_url = file_url.startsWith("https://storage.cloud.google.com")
+    var ext = ""
+    if(is_url && filename == "File Uploaded"){
+        // Commented the below line as we do no want to re-verify the already uploaded document
+        //ext = file_url.substring(file_url.lastIndexOf(".")+1)
+        return true;
+    }else{
+        if(! hidden_file_value || hidden_file_value == ""){
+            return false;
+        }
+        // This extracts the extension from the file name
+        filenameExtension = filename.substring(filename.lastIndexOf(".")+1);
+        // This extracts the the extension from the base64 converted value
+        ext = hidden_file_value.match(/[^:/]\w+(?=;|,)/)[0];
+    }
+
+    // Checking if the base64 matches or not
+    if(ext!= "" && extns.includes(ext)){
+        // Checking if the filename extension matches or not
+        if(filename != "File Uploaded"){
+            if(filenameExtension != "" && extns.includes(filenameExtension)){
+                return true;
+            }else{
+                component.focus();
+                return false;
+            }
+        }
+    }else{
+            component.focus();
+            return false;
+    }
+
+}
+
+function validateFileUploaded(hidden_component){
+    return (hidden_component.value.startsWith(' https://storage.cloud.google.com') || hidden_component.value.startsWith('data:'));
+}
+
+function validateFileSize(component, hidden_component,minSize, maxSize)
+{
+   var size =0;
+   if(navigator.appName=="Microsoft Internet Explorer")
+   {
+      if(component.value)
+      {
+         var oas=new ActiveXObject("Scripting.FileSystemObject");
+         var e=oas.getFile(component.value);
+         size = (e.size / 1024 ).toFixed(2);
+      }
+   }
+   else
+   {
+      if(component.files && component.files[0]!=undefined)
+      {
+
+         size = (component.files[0].size/ 1024).toFixed(2);
+         if(size!=undefined && minSize <size && size <maxSize){
+            return true;
+         }
+      return false;
+      }
+      else{
+         if(component.getAttribute('value')!= "" && hidden_component.value!= "" && component.getAttribute('value') == hidden_component.value){
+            return true;
+         }
+         return false;
+      }
+   }
+
+}
+
+
+$( document ).ready(function () {
+    var cityConstants = $.ajax({
+  		method: 'GET',
+  		url: CITY_JSON_PATH,
+  		dataType: "text",
+  		async: false,
+	});
+	const CITY_JSON = JSON.parse(cityConstants.responseText);
+	var dob = $('.datepicker').val();
+	$('.datepicker').datetimepicker({
+        format: 'DD/MM/YYYY'
+    });
+	$('.datepicker').data("DateTimePicker").date(formatDate());
+
+	function calculateAndUpdateAge(showAlert = true) {
+        var dobStr = $('.datepicker').val();
+        if (!dobStr) {
+            document.getElementById('calculated-age').value = "—";
+            return;
+        }
+        var dob = moment(dobStr, "DD/MM/YYYY");
+        if (!dob.isValid()) {
+            document.getElementById('calculated-age').value = "—";
+            return;
+        }
+        var today = moment();
+        var age = today.diff(dob, 'years');
+        if (age >= 0) {
+            document.getElementById('calculated-age').value = age + " years";
+            if (showAlert && age < 10) {
+                alert("According to the entered date of birth, the calculated age is below 10 years. Please verify that the date of birth is correct.");
+            }
+        } else {
+            document.getElementById('calculated-age').value = "—";
+        }
+    }
+
+    calculateAndUpdateAge();
+    let hasNewDateBeenSelected = false;
+    $(".datepicker").on("dp.change", function (e) {
+        $(this).data("DateTimePicker").maxDate(moment().subtract(5, 'years'));
+        $(this).data("DateTimePicker").minDate(moment().subtract(110, 'years'));
+        hasNewDateBeenSelected = true;
+    });
+
+    $('.datepicker').on('dp.hide', function () {
+        if (hasNewDateBeenSelected) {
+            calculateAndUpdateAge(true);
+            hasNewDateBeenSelected = false;
+        }
+    });
+
+    $('.datepicker').on('input', function () {
+        document.getElementById('calculated-age').value = "—";
+        hasNewDateBeenSelected = true;
+        var dob_text = $('.datepicker').val();
+        var dob_val = moment(dob_text, "DD/MM/YYYY", true);
+        if (dob_val.isValid()) {
+            var today = moment();
+            var age_val = today.diff(dob_val, 'years');
+            if (age_val >= 0) {
+                document.getElementById('calculated-age').value = age_val + " years";
+            }
+        }
+        else {
+           document.getElementById('calculated-age').value = "—";
+        }
+    });
+
+    if(document.getElementById('pwd_category').value !== 'Select' && document.getElementById("is_physically_challenged_True").checked){
+        show_dependent_field('is_physically_challenged-dependent');
+    }
+    prefillCountry();
+    prefillState();
+    prefillCity();
+    $('.image-popup-link').magnificPopup({type:'image'});
+    document.getElementById('is_scst_True').onclick = showField;
+    document.getElementById('is_scst_False').onclick = clearField;
+    document.getElementById('from_outside_india_True').onclick = showFieldOutsideIndia;
+    document.getElementById('from_outside_india_False').onclick = clearFieldOutsideIndia;
+
+    document.getElementById("is_physically_challenged_True").addEventListener('click', function (event) {
+            show_dependent_field('pwd_category-dependent');
+            if(document.getElementById('pwd_category').value !== 'Select'){
+                show_dependent_field('is_physically_challenged-dependent');
+            }
+    });
+    document.getElementById("is_physically_challenged_False").addEventListener('click', function (event) {
+            document.getElementsByClassName('pwd_category-dependent')[1].removeAttribute("style");
+            document.getElementsByClassName('pwd_category-dependent')[1].classList.add('hidden-field');
+            document.getElementsByClassName('is_physically_challenged-dependent')[0].removeAttribute("style");
+            document.getElementsByClassName('is_physically_challenged-dependent')[0].required = false;
+            document.getElementById('pwd_category').value = 'Select'
+    });
+   document.getElementById('pwd_category').addEventListener("change", function() {
+       if( !["No", "Select"].includes(document.getElementById('pwd_category').value))
+       {
+           show_dependent_field('is_physically_challenged-dependent');
+       }
+       else
+       {
+            document.getElementsByClassName('is_physically_challenged-dependent')[0].removeAttribute("style");
+            document.getElementsByClassName('is_physically_challenged-dependent')[0].required = false;
+       }
+   });
+
+	if($("input[name='is_scst']:checked").val() == "True"){
+		show_dependent_field('is_scst-dependent');
+	}
+    if($("input[name='from_outside_india']:checked").val() == "True"){
+		show_dependent_field('from_outside_india-dependent');
+        role_based_view_outside_india();
+	} else {
+        hide_college_faculty_company_block();
+    }
+
+	$('.custom-file-input').change(function(event) {
+		fileInputChange($(this), event);
+	});
+
+	$( "input[type=file]" ).each(function() {
+		var file_value = $(this).attr('value');
+
+		if(file_value.length > 0 && file_value!= "None"){
+			var file_name = $(this).attr('name');
+			file_name += "_hidden";
+			$("#"+file_name).val(file_value);
+			fileInputChange($(this));
+		}
+	});
+
+    $('#exam_taker_role_employed').click(function (event){
+        if($("input[name='from_outside_india']:checked").val() == "True"){
+            hide_college_faculty_block();
+        }
+    });
+    $('#exam_taker_role_student').click(function (event){
+        if($("input[name='from_outside_india']:checked").val() == "True"){
+            hide_faculty_company_block();
+        }
+    });
+    $('#exam_taker_role_faculty').click(function (event){
+        if($("input[name='from_outside_india']:checked").val() == "True"){
+            hide_college_company_block();
+        }
+    });
+    $('#exam_taker_role_other').click(function (event){
+        if($("input[name='from_outside_india']:checked").val() == "True"){
+            hide_college_faculty_company_block();
+        }
+    });
+   function fileInputChange(element, evt=""){
+        var file_name = "File Uploaded";
+        element.parent().css("background-color", "#9dbff9");
+        // checking failed statuses
+        if (typeof(list_of_statuses) != 'undefined' && list_of_statuses[element[0].id].includes('failed')){
+            file_name = "Change Document";
+            element.parent().css("background-color", "#555770");
+        }
+	  if(evt !== ""){
+          try {
+              let loader = $("#" + element[0].id + "_loader");
+              if (element[0].files[0] !== undefined) {
+                  file_name = element[0].files[0].name;
+                  loader.addClass('loader');
+                  var fReader = new FileReader();
+                  fReader.readAsDataURL(element[0].files[0]);
+                  fReader.onloadend = function (event) {
+                      var hidden_attr = document.getElementById(element[0].name + "_hidden");
+                      hidden_attr.value = event.target.result;
+                      loader.removeClass('loader');
+                  };
+              }
+          }
+          catch (err) {
+              $("#" + element[0].id + "_loader").removeClass('loader');
+              alert("Unexpected Error occurred. Please reload the page and try again.");
+          }
+	  }
+	  element.next('span.btnLabel').text(file_name);
+	  element.parent().next('button#viewButton').show();
+	}
+
+    function showField(e) {
+      var conditional_field = e.target.name + "-dependent"
+      show_dependent_field(conditional_field);
+    }
+    function showFieldOutsideIndia(e) {
+        let conditional_field = e.target.name + "-dependent"
+        show_dependent_field(conditional_field)
+        role_based_view_outside_india()
+    }
+    function clearFieldOutsideIndia(e) {
+        // let conditional_field = e.target.name + "-dependent"
+        clearField(e)
+        $('.college-letter-button').hide();
+        $('.faculty-letter-button').hide();
+        $('.company-letter-button').hide();
+    }
+    function show_dependent_field(conditional_field){
+      var fields = document.getElementsByClassName(conditional_field);
+      for (var i = 0; i < fields.length; i++) {
+        // display the label and input for dependent hidden fields
+        fields[i].style.display = 'block';
+        // turn on required for this field's input.
+        fields[i].required = true;
+      }
+    }
+
+    function hide_college_faculty_block() {
+        $('.college-letter').hide();
+        $('.college-letter-button').hide();
+        $('.faculty-letter-button').hide();
+        $('.company-letter').show();
+        $('.company-letter-button').show();
+    }
+    function hide_college_company_block() {
+        $('.college-letter-button').hide();
+        $('.college-letter').show();
+        $('.faculty-letter-button').show();
+        $('.company-letter').hide();
+        $('.company-letter-button').hide();
+    }
+    function hide_faculty_company_block() {
+        $('.college-letter').show();
+        $('.college-letter-button').show();
+        $('.faculty-letter-button').hide();
+        $('.company-letter').hide();
+        $('.company-letter-button').hide();
+    }
+    function hide_college_faculty_company_block() {
+        $('.college-letter').hide();
+        $('.college-letter-button').hide();
+        $('.faculty-letter-button').hide();
+        $('.company-letter').hide();
+        $('.company-letter-button').hide();
+    }
+    function role_based_view_outside_india() {
+        let exam_taker_role = get_exam_taker_role();
+        if(exam_taker_role == "employed"){
+            hide_college_faculty_block();
+        }
+        if(exam_taker_role == "student"){
+            hide_faculty_company_block();
+        }
+        if(exam_taker_role == "faculty"){
+            hide_college_company_block();
+        }
+        if(exam_taker_role == "other"){
+            hide_college_faculty_company_block();
+        }
+    }
+    function clearField(e) {
+      var conditional_field = e.target.name + "-dependent"
+      var fields = document.getElementsByClassName(conditional_field);
+      for (var i = 0; i < fields.length; i++) {
+        // turn off required for this field's input.
+        fields[i].required = false;
+        // hide the label and input for dependent hidden fields
+        fields[i].removeAttribute("style")
+
+      }
+    }
+
+    $('#is_local_chapter').change(function(){
+        if($(this).is(":checked")) {
+            $('.input-local_chapter_college').prop('disabled', false)
+        }
+        else{
+            $('.input-local_chapter_college').prop('disabled', true)
+        }
+
+    });
+
+	function formatDate(){
+		if(old_date_of_birth){
+		    date = old_date_of_birth.replace(/ /g,"").split("-")
+		    if(date.length != 3){
+		        return "";
+		    }
+		    var yy = date[0]
+		    var mm = date[1]
+		    var dd = date[2]
+		    return dd+"/"+mm+"/"+yy;
+		}
+		return "";
+	}
+
+    function element(id) {
+	    return document.getElementById(id);
+    }
+
+    function showEl(el) {
+        el.classList.remove('hidden-field');
+        el.parentElement.classList.remove('hidden-field');
+    }
+
+    function hideEl(el) {
+        el.classList.add('hidden-field');
+        el.parentElement.classList.add('hidden-field');
+    }
+
+    function clearOptions(el,default_value=default_value, include_other=false){
+        for(i = el.options.length; i >= 0; i--) {
+            el.remove(i);
+        }
+
+        var option = document.createElement("option")
+        option.text = "Select a value";
+        option.value = "";
+        el.appendChild(option);
+
+        if(include_other){
+            var option = document.createElement("option")
+            option.text = 'Other';
+            option.name = 'other';
+            option.value = 'other';
+            if(default_value === 'other'){
+                option.selected = true;
+            }
+            el.appendChild(option);
+        }
+    }
+
+    function prefillCountry(){
+        if(old_address_country){
+            if(old_address_country.toLowerCase() !== 'india'){
+                other_address_country_field = element('other_address_country');
+                address_country_field = element('address_country');
+                address_country_field.value = 'other';
+                address_country_field.selected = true;
+                other_address_country_field.value = old_address_country;
+                showEl(other_address_country_field);
+                [
+                    'address_state',
+                    'address_city',
+                ].forEach(function(x){
+                    addressAttribute = element(x);
+                    hideEl(addressAttribute);
+                    clearOptions(addressAttribute,default_value='other',include_other=true);
+                    other_address_field = element('other_'+x);
+                    other_address_field.value = address_fields[x];
+                    showEl(other_address_field);
+                });
+            }
+            else{
+                address_country_field = element('address_country');
+                address_country_field.value = 'india';
+                address_country_field.selected = true;
+            }
+        }
+    }
+
+    function prefillState() {
+        if(old_address_country && old_address_state){
+            if(old_address_country.toLowerCase() === 'india'){
+                addressState = element('address_state')
+                clearOptions(addressState,default_value='',include_other=false);
+                STATE_JSON.forEach(function(v){
+                    var option = document.createElement("option")
+                    option.text = v.label;
+                    option.name = v.name;
+                    option.value = v.value;
+                    if(v.value === old_address_state.toLowerCase() ){
+                        option.selected = true;
+                    }
+                    addressState.appendChild(option);
+                });
+            }
+        }
+    }
+
+    function prefillCity() {
+        if(old_address_country && old_address_state && old_address_city){
+            if (old_address_country.toLowerCase() === 'india'){
+                if(!CITY_JSON[old_address_state.toLowerCase()]){
+                    clearOptions(element('address_city'),default_value='other',include_other=true);
+                    hideEl(element('address_city'));
+                    prefill_city_field = element('other_address_city');
+                    prefill_city_field.value = old_address_city;
+                    showEl(prefill_city_field);
+                    return;
+                }
+                city_select_field = element('address_city')
+                clearOptions(city_select_field,default_value='',include_other=true);
+                var city_available = false
+                CITY_JSON[old_address_state.toLowerCase()].forEach(function(v){
+                    var option = document.createElement("option")
+                    option.text = v.label;
+                    option.name = v.name;
+                    option.value = v.value;
+                    if(v.value === old_address_city.toLowerCase()){
+                        option.selected = true
+                        city_available = true
+                    }
+                    city_select_field.appendChild(option);
+                });
+                if(!city_available){
+                    city_select_field.value = 'other';
+                    city_select_field.selected = true;
+                    other_address_city_field = element('other_address_city');
+                    other_address_city_field.value = old_address_city;
+                    showEl(other_address_city_field);
+                }
+            }
+        }
+    }
+
+    function countryChanged() {
+        countryField = element('address_country');
+        if(countryField.value === 'other'){
+            showEl(element('other_address_country'));
+        }
+        else{
+            hideEl(element('other_address_country'));
+            stateSelectField = element('address_state')
+            clearOptions(stateSelectField,default_value='',include_other=false);
+            STATE_JSON.forEach(function(v){
+                var option = document.createElement("option")
+                option.text = v.label;
+                option.name = v.name;
+                option.value = v.value;
+                stateSelectField.appendChild(option);
+            });
+            clearOptions(element('address_city'),default_value='',include_other=false);
+        }
+        [
+          'address_state',
+          'address_city',
+        ].forEach(function(x){
+            if(countryField.value === 'other'){
+                showEl(element('other_'+x));
+                hideEl(element(x));
+                clearOptions(element(x),default_value='other',include_other=true);
+            }
+            else{
+                showEl(element(x));
+                hideEl(element('other_'+x))
+            }
+        });
+    }
+
+    function stateChanged() {
+        stateField = element('address_state');
+        var selected = stateField.value;
+        var select_field = document.getElementById('address_city');
+        if (!selected || selected == "" || selected == "Select" || selected == "Select a value") {
+            return;
+        }
+        if(!CITY_JSON[selected]){
+            clearOptions(select_field,default_value='other',include_other=true);
+            hideEl(element('address_city'));
+            showEl(element('other_address_city'));
+            return;
+        }
+        clearOptions(select_field,default_value='',include_other=true);
+        CITY_JSON[selected].forEach(function(v){
+            var option = document.createElement("option")
+            option.text = v.label;
+            option.name = v.name;
+            option.value = v.value;
+            select_field.appendChild(option);
+        });
+        showEl(element('address_city'));
+        hideEl(element('other_address_city'));
+    }
+
+    function cityChanged() {
+        cityField = element('address_city');
+        if(cityField.value === 'other'){
+            showEl(element('other_address_city'));
+        }
+        else{
+            hideEl(element('other_address_city'));
+        }
+    }
+
+    element('address_country').onchange = countryChanged;
+    element('address_state').onchange = stateChanged;
+    element('address_city').onchange = cityChanged;
+
+});
+

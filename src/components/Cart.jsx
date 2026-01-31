@@ -75,11 +75,14 @@ function Cart({ cartItems, onClose, updateQuantity, removeFromCart, clearCart, a
           onClose={() => setShowCheckout(false)}
           onOrderComplete={async () => {
             const total = calculateTotal()
-            await addOrder([...cartItems], total) // Wait for order to save
+            const orderId = Date.now().toString()
+            await addOrder([...cartItems], total, orderId)
             setOrderedItems([...cartItems])
             setShowCheckout(false)
             setShowSuccess(true)
             clearCart()
+            // Show order ID to user
+            alert(`Order placed successfully! Your Order ID is: ${orderId}`)
           }}
         />
       )}

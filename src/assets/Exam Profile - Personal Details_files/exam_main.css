@@ -1,0 +1,23 @@
+label.custom-control-label:focus-within,
+a:focus-visible,
+a.file-button:focus-visible,
+a:focus-visible p,
+span:focus-visible,
+button.close:focus-visible,
+label:focus-within,
+li:focus-visible,
+input:focus-visible,
+input[type="file"]:focus-visible+span,
+input[type="radio"]:focus-visible+label,
+select:focus-visible,
+label:focus-visible,
+button:focus-visible {
+	outline-offset: 1px !important;
+	outline: 2px solid black !important;
+}
+
+
+
+
+
+

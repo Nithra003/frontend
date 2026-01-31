@@ -1,6 +1,6 @@
 import './Orders.css'
 
-function Orders({ orders = [] }) {
+function Orders({ orders = [], setCurrentPage }) {
   if (orders.length === 0) {
     return (
       <section className="orders">
@@ -22,8 +22,17 @@ function Orders({ orders = [] }) {
           {orders.map((order, index) => (
             <div key={index} className="order-card">
               <div className="order-header">
-                <h3>Order #{index + 1}</h3>
+                <h3>Order #{order.orderId || index + 1}</h3>
                 <span className="order-date">{order.date}</span>
+                <button 
+                  className="track-btn"
+                  onClick={() => {
+                    setCurrentPage('track-order')
+                    // Auto-fill tracking ID if available
+                  }}
+                >
+                  Track Order
+                </button>
               </div>
               <div className="order-items">
                 {order.items.map((item, itemIndex) => (

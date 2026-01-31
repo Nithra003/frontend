@@ -7,12 +7,14 @@ import Products from './components/Products'
 import Services from './components/Services'
 import Contact from './components/Contact'
 import Orders from './components/Orders'
+import OrderTracking from './components/OrderTracking'
 import Wishlist from './components/Wishlist'
 import SingleProduct from './components/SingleProduct'
 import CategoryView from './components/CategoryView'
 import Cart from './components/Cart'
 import Auth from './components/Auth'
 import BrandsAnimation from './components/BrandsAnimation'
+import TestFetch from './components/TestFetch'
 import './App.css'
 
 function App() {
@@ -57,12 +59,12 @@ function App() {
     setOrders(orders)
   }
 
-  const addOrder = async (orderItems, total) => {
+  const addOrder = async (orderItems, total, orderId) => {
     const newOrder = {
       items: orderItems,
       total: total,
       date: new Date().toLocaleDateString(),
-      orderId: Date.now().toString()
+      orderId: orderId || Date.now().toString()
     }
     
     // Try to save to backend first
@@ -202,7 +204,8 @@ function App() {
       case 'products': return <Products addToCart={addToCart} onProductClick={handleProductClick} onCategoryClick={handleCategoryClick} searchQuery={searchQuery} addToWishlist={addToWishlist} wishlistItems={wishlistItems} />
       case 'services': return <Services />
       case 'contact': return <Contact />
-      case 'orders': return <Orders orders={orders} />
+      case 'orders': return <Orders orders={orders} setCurrentPage={setCurrentPage} />
+      case 'track-order': return <OrderTracking orders={orders} />
       case 'wishlist': return <Wishlist wishlistItems={wishlistItems} removeFromWishlist={removeFromWishlist} addToCart={addToCart} onProductClick={handleProductClick} />
       case 'single-product': return selectedProduct ? <SingleProduct product={selectedProduct} onBack={handleBackToProducts} addToCart={addToCart} /> : <Products addToCart={addToCart} onProductClick={handleProductClick} onCategoryClick={handleCategoryClick} searchQuery={searchQuery} />
       case 'category-view': return selectedCategory ? <CategoryView category={selectedCategory} onBack={handleBackToCategories} onProductClick={handleProductClick} addToCart={addToCart} /> : <Products addToCart={addToCart} onProductClick={handleProductClick} onCategoryClick={handleCategoryClick} searchQuery={searchQuery} />
@@ -212,6 +215,7 @@ function App() {
 
   return (
     <div className="app">
+      <TestFetch />
       {isLoading && <LoadingAnimation />}
       <Header 
         currentPage={currentPage} 

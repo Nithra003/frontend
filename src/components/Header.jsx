@@ -56,6 +56,12 @@ function Header({ currentPage, setCurrentPage, cartCount, onCartClick, onSearch,
             Orders
           </button>
           <button 
+            className={currentPage === 'track-order' ? 'nav-btn active' : 'nav-btn'}
+            onClick={() => handleNavClick('track-order')}
+          >
+            Track Order
+          </button>
+          <button 
             className={currentPage === 'wishlist' ? 'nav-btn active' : 'nav-btn'}
             onClick={() => handleNavClick('wishlist')}
           >
